@@ -12,9 +12,10 @@ const userModel = new mongoose.Schema({
     lastName: { type: String, },
     verified: {
         type: Boolean,
-        default: false
+        default: true
     },
-    newsLettre: { type: Boolean, default: false }
+    newsLettre: { type: Boolean, default: false },
+    wallet: { type: Number, default: 0 }
 });
 userModel.plugin(uniqueValidator);
 module.exports = mongoose.model("user", userModel);

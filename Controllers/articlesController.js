@@ -19,7 +19,6 @@ exports.createArticles = async(req, res, next) => {
         const photoCloudinary = await cloudinary.uploader.upload(req.file.path)
         const articles = new Articles({
             name: req.body.name,
-            category: req.body.category,
             price: req.body.price,
             quantity: req.body.quantity,
             type: req.body.type,
@@ -29,71 +28,19 @@ exports.createArticles = async(req, res, next) => {
         });
 
 
-        //////////////////////////////NewsLetter
-        const array = await User.find()
-        const array1 = []
-        const arrayComany = []
-        const arrayComany1 = []
 
-
-
-        array.forEach(element => {
-
-            if (element.newsLettre) {
-                array1.push(element.email)
-            }
-        });
-
-
-
-        for (i = 0; i < array1.length; i++) {
-
-            console.log(array1[i]);
-
-
-
-            var smtpTrans = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: process.env.email_app,
-                    pass: process.env.password_app,
-
-                }
-
-            });
-            val = articles.articlePicture
-            fname = "Hello Showapper"
-            productname = articles.name
-            productPrice = articles.price
-
-            var mailOptions = {
-                from: process.env.email_app,
-                to: array1[i],
-                subject: 'Account Verification Link',
-                attachments: [{
-                        filename: "logo.png",
-                        path: "./logo.png",
-                        cid: 'logo.ee'
-                    },
-
-                ],
-
-                html: templateReset(val, fname, productname),
-            };
-            smtpTrans.sendMail(mailOptions, async function(err) {
-                if (err) {
-                    return res.status(500).send({ msg: err });
-                }
-            });
-
-
-
-        }
         await articles.save()
             .then(() => res.status(201).json({ message: 'articles saved !' }))
             .catch(error => res.status(400).json({ message: 'articles not saved error 400 check id company!', error }));
 
 
+        // const array = await User.find()
+
+        // array.forEach(element => {
+
+        //     element.wallet = element.wallet + (articles.price * 0.1)
+        // });
+        // console.log(element.wallet);
 
 
 
@@ -101,7 +48,8 @@ exports.createArticles = async(req, res, next) => {
 
 
 
-        ///////////////
+
+
     }
     //get articles by id
 exports.getArticlesbyid = (req, res, next) => {

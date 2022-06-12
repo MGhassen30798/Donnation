@@ -18,6 +18,7 @@ var CompanyRouter = require('./routes/companyRouter');
 var UserRouter = require('./routes/userRouter');
 var adminRouter = require('./routes/admin');
 var AssociationRouter = require('./routes/Association');
+var ArtictleRouter = require('./routes/articlesRouter');
 
 var app = express();
 
@@ -102,6 +103,7 @@ app.use((req, res, next) => {
 app.use("/users", UserRouter);
 app.use("/company", CompanyRouter);
 app.use("/Association", AssociationRouter);
+app.use("/Article", ArtictleRouter);
 app.use("/admin", adminRouter)
 app.use('/images', express.static(path.join(__dirname, 'images')))
 
