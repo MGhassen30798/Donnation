@@ -80,68 +80,25 @@ exports.signup = async(req, res) => {
         password: hashedPass,
         profilePicture: photoCloudinary.url
     })
-    const tokenJWT = jwt.sign({ username: req.body.email }, "SECRET")
+    await user.save()
+        .then(() => {
 
 
-    try {
-
-        var token = new Token({ email: user.email, token: crypto.randomBytes(16).toString('hex') });
-
-        var smtpTrans = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.email_app,
-                pass: process.env.password_app,
-
-            }
-
-        });
-        val = '\nhttp:\/\/' + req.headers.host + '\/users\/confirmation\/' + user.email + '\/' + token.token;
-        fname = user.firstName;
-
-        var mailOptions = {
-            from: process.env.email_app,
-            to: user.email,
-            subject: 'Account Verification Link',
-            attachments: [{
-                    filename: "logo.png",
-                    path: "./logo.png",
-                    cid: 'logo.ee'
-                },
-
-            ],
-
-            html: templateReset(val, fname),
-        };
-        smtpTrans.sendMail(mailOptions, async function(err) {
-            if (err) {
-                return res.status(500).send({ msg: err });
-
-            }
-            // return res.status(200)
-            //     .json({
-            //         msg: 'A verification email has been sent to ' + user.email +
-            //             '. It will be expire after one day. If you not get verification Email click on resend token.',
-            //         user: user
-            //     });
-            res.status(201).json({
-                token: tokenJWT,
-                user: user,
-                reponse: "good"
-            })
-
-            await token.save();
-            await user.save();
-        });
-
-    } catch (error) {
-        res.status(400).json({ reponse: error.message })
-    }
 
 
+            res.status(201).json({ message: 'Created user !' })
+
+
+
+        })
+        .catch(error => res.status(400).json({ error }));
 
 
 };
+
+
+
+
 
 
 exports.loginSocial = (req, res, next) => {
